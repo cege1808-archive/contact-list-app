@@ -26,6 +26,7 @@ $(function() {
       row.append(headingBlank);
   }
 
+
   function insertContact(contact){
     var body = $("table tbody");
     body.append("<tr data-id= " + contact.id + " ></tr>");
@@ -101,21 +102,32 @@ $(function() {
     var id = button.data("id");
     console.log(button.data("id"));
     $.ajax({
-      url: '/api/contact/'+ id +'/edit',
+      url: '/api/contact/'+ id +'/info',
       method: 'GET',
       success: function(contact){
-        replaceTdToInput(contact);
+        replaceInfoToInput(contact);
       }
     })
   }
 
+  function cancelContact(button){
+    var id = button.data("id");
+    console.log(button.data("id"));
+    $.ajax({
+      url: '/api/contact/'+ id +'/info',
+      method: 'GET',
+      success: function(contact){
+        replaceInputToInfo(contact);
+      }
+    })
+  }
 
-  function replaceTdToInput(contact){
+  function replaceInfoToInput(contact){
     var row = $("tr[data-id="+ contact.id +"]");
-    var inputName = "<td><input type='text' name ='first_name' value=' "+ contact.first_name +" '/><input type='text' name ='last_name' value=' "+ contact.last_name +" '/></td>";
-    var inputEmail = "<td><input type='text' name ='email' value=' "+ contact.email +" '/></td>"
-    var inputPhone = "<td><input type='text' name ='phone' value=' "+ contact.phone +" '/></td>"
-    var inputBirthday = "<td><input type='date' name ='birthday' value=' "+ contact.birthday +" '/></td>"
+    var inputName = "<td><input class='first_name' type='text' name ='first_name' value=' "+ contact.first_name +" '/><input class='last_name' type='text' name ='last_name' value=' "+ contact.last_name +" '/></td>";
+    var inputEmail = "<td><input class='email' type='text' name ='email' value=' "+ contact.email +" '/></td>"
+    var inputPhone = "<td><input class='phone' type='text' name ='phone' value=' "+ contact.phone +" '/></td>"
+    var inputBirthday = "<td><input class='birthday' type='date' name ='birthday' value=' "+ contact.birthday +" '/></td>"
     var contentSave = "<td><button class='btn btn-default glyphicon glyphicon-ok save' data-id= " + contact.id + " ></button></td>";
     var contentCancel = "<td><button class='btn btn-default glyphicon glyphicon-remove cancel' data-id= " + contact.id + " ></button></td>";
 
@@ -125,12 +137,29 @@ $(function() {
     row.find(".birthday").replaceWith(inputBirthday);
     row.find(".edit").replaceWith(contentSave);
     row.find(".delete").replaceWith(contentCancel);
+  }
 
+  function replaceInputToInfo(contact){
+    var row = $("tr[data-id="+ contact.id +"]");
+    var contentName = "<td class='full_name'>"+ contact.first_name + " " + contact.last_name +"</td>" ;
+    var contentEmail = "<td class='email'>"+ contact.email +"</td>";
+    var contentPhone = "<td class='phone'>"+ contact.phone +"</td>";
+    var contentBirthday = "<td class='birthday'>"+ contact.birthday +"</td>";
+    var contentEdit = "<td><button class='btn btn-default glyphicon glyphicon-pencil edit' data-id= " + contact.id + " ></button></td>";
+    var contentDelete = "<td><button class='btn btn-default glyphicon glyphicon-trash delete' data-id= " + contact.id + " ></button></td>";
+
+    row.find(".first_name").replaceWith(contentName);
+    row.find(".last_name").remove();
+    row.find(".email").replaceWith(contentEmail);
+    row.find(".phone").replaceWith(contentPhone);
+    row.find(".birthday").replaceWith(contentBirthday);
+    row.find(".save").replaceWith(contentEdit);
+    row.find(".cancel").replaceWith(contentDelete);
   }
 
 
   getContacts();
-  $("table").find()
+
 
   $("form").on('submit', function(event){
     event.preventDefault();
@@ -149,6 +178,11 @@ $(function() {
     console.log("edit button clicked");
   });
 
+  $("table").on('click', 'button.cancel', function(event){
+    event.preventDefault();
+    cancelContact($(this));
+    console.log("cancel button clicked");
+  });
 
 
 });

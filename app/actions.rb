@@ -6,15 +6,10 @@ end
 get '/api/contacts' do
   content_type :json
   @all_contacts = Contact.order(:first_name)
-  # @all_contacts.each do |contact|
-  #   contact[:birthday_format] = contact.birthday_format
-  #   contact[:full_name] = contact.full_name
-  # end
-
   @all_contacts.to_json
 end
 
-get '/api/contact/:contact_id/edit' do
+get '/api/contact/:contact_id/info' do
   content_type :json
   @contact = Contact.find(params[:contact_id])
   @contact.to_json
