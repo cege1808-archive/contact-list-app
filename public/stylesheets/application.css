@@ -1,4 +1,13 @@
-.contact-list{
-  border: 1px solid black;
-  display: inline-block;
+.add-contact {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.user-image {
+  height:40px;
+  padding: 5px;
+}
+
+.contact-list tbody tr td {
+  line-height: 40px;
 }
