@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(function() {
   $("button.cancel").hide();
   $(".add-contact form").hide();
   $(".add-contact").on('click', 'button', function(){
@@ -36,8 +36,8 @@ $(document).ready(function() {
     var contentEmail = "<td>"+ contact.email +"</td>";
     var contentPhone = "<td>"+ contact.phone +"</td>";
     var contentBirthday = "<td>"+ contact.birthday +"</td>";
-    var contentEdit = "<td><button class='btn btn-default glyphicon glyphicon-pencil'></button></td>";
-    var contentDelete = "<td><button class='btn btn-default glyphicon glyphicon-trash'></button></td>";
+    var contentEdit = "<td><button class='btn btn-default glyphicon glyphicon-pencil edit' data-id=' " + contact.id + " '></button></td>";
+    var contentDelete = "<td><button class='btn btn-default glyphicon glyphicon-trash delete' data-id=' " + contact.id + " '></button></td>";
 
     row.append(contentName);
     row.append(contentImage);
@@ -46,6 +46,10 @@ $(document).ready(function() {
     row.append(contentBirthday);
     row.append(contentEdit);
     row.append(contentDelete);
+
+
+    // body.find("tr").data("id", contact.id);
+    // body.find("button").data("id", contact.id);
   }
 
   function getContacts(){
@@ -62,14 +66,6 @@ $(document).ready(function() {
     });
   }
 
-  
-  getContacts();
-
-  $("form").on('submit', function(event){
-    event.preventDefault();
-    addContact();
-  });
-
   function addContact(){
     var form = $("form");
     var addform = form.serialize();
@@ -78,14 +74,50 @@ $(document).ready(function() {
       url: '/api/contact/create',
       method: 'POST',
       data: addform,
-      success: function(data){
-        insertContact(data);
-        console.log("done");
-        form.trigger("reset");
+      success: function(contact){
+        if (contact.first_name)  {
+          insertContact(contact);
+          console.log("done adding name");
+          form.trigger("reset");
+        }
+        else {
+          console.log(contact);
+        }
       }
     })
 
-  };
+  }
+
+
+  function deleteContact(button){
+    id = button.data("id");
+    console.log(button.data("id"));
+    $.ajax({
+      url: '/api/contact/'+ id +'/delete',
+      method: 'DELETE',
+      success: function(contact){
+        console.log(contact);
+        $("button[data-id*="+ contact.id +"]").closest("tr").remove();
+      }
+
+    })
+  }
+  
+
+
+  getContacts();
+
+  $("form").on('submit', function(event){
+    event.preventDefault();
+    addContact();
+  });
+
+  $("table").on('click', 'button.delete', function(event){
+    event.preventDefault();
+    deleteContact($(this));
+    console.log("delete button clicked");
+  });
+
 
 
 });

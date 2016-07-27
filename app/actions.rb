@@ -31,11 +31,23 @@ post '/api/contact/create' do
   if @contact.save
     @contact.to_json
   else
-    @contact.errors.to_json
+    @contact.errors.full_messages.to_json
   end
 end
 
 get '/contact/:contact_id' do
+
+end
+
+delete '/api/contact/:contact_id/delete' do
+  content_type :json
+  @contact = Contact.find(params[:contact_id])
+  
+  if @contact.destroy
+    @contact.to_json
+  else
+    @contact.errors.to_json
+  end
 
 end
 
