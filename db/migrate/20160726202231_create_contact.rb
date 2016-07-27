@@ -5,7 +5,6 @@ class CreateContact < ActiveRecord::Migration
       t.string :last_name
       t.string :email
       t.string :phone
-      t.string :image
       t.datetime :birthday
       t.timestamps null: false
     end

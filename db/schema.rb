@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 20160726202231) do
     t.string   "last_name"
     t.string   "email"
     t.string   "phone"
-    t.string   "image"
     t.datetime "birthday"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
