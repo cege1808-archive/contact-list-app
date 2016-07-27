@@ -14,10 +14,11 @@ get '/api/contacts' do
   @all_contacts.to_json
 end
 
-# get '/api/contact/new' do
-#   @contact = Contact.new
-#   erb :new
-# end
+get '/api/contact/:contact_id/edit' do
+  content_type :json
+  @contact = Contact.find(params[:contact_id])
+  @contact.to_json
+end
 
 post '/api/contact/create' do 
   content_type :json

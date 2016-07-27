@@ -28,16 +28,16 @@ $(function() {
 
   function insertContact(contact){
     var body = $("table tbody");
-    body.append("<tr></tr>");
+    body.append("<tr data-id= " + contact.id + " ></tr>");
     var row = body.find("tr").last(); 
     console.log(contact);
-    var contentName = "<td>"+ contact.first_name + " " + contact.last_name +"</td>" ;
-    var contentImage = "<td><img class='user-image' src='http://cdn.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-user-19.png' /></td>";
-    var contentEmail = "<td>"+ contact.email +"</td>";
-    var contentPhone = "<td>"+ contact.phone +"</td>";
-    var contentBirthday = "<td>"+ contact.birthday +"</td>";
-    var contentEdit = "<td><button class='btn btn-default glyphicon glyphicon-pencil edit' data-id=' " + contact.id + " '></button></td>";
-    var contentDelete = "<td><button class='btn btn-default glyphicon glyphicon-trash delete' data-id=' " + contact.id + " '></button></td>";
+    var contentName = "<td class='full_name'>"+ contact.first_name + " " + contact.last_name +"</td>" ;
+    var contentImage = "<td class='img'><img class='user-image' src='http://cdn.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-user-19.png' /></td>";
+    var contentEmail = "<td class='email'>"+ contact.email +"</td>";
+    var contentPhone = "<td class='phone'>"+ contact.phone +"</td>";
+    var contentBirthday = "<td class='birthday'>"+ contact.birthday +"</td>";
+    var contentEdit = "<td><button class='btn btn-default glyphicon glyphicon-pencil edit' data-id= " + contact.id + " ></button></td>";
+    var contentDelete = "<td><button class='btn btn-default glyphicon glyphicon-trash delete' data-id= " + contact.id + " ></button></td>";
 
     row.append(contentName);
     row.append(contentImage);
@@ -47,9 +47,6 @@ $(function() {
     row.append(contentEdit);
     row.append(contentDelete);
 
-
-    // body.find("tr").data("id", contact.id);
-    // body.find("button").data("id", contact.id);
   }
 
   function getContacts(){
@@ -85,27 +82,55 @@ $(function() {
         }
       }
     })
-
   }
 
-
   function deleteContact(button){
-    id = button.data("id");
+    var id = button.data("id");
     console.log(button.data("id"));
     $.ajax({
       url: '/api/contact/'+ id +'/delete',
       method: 'DELETE',
       success: function(contact){
         console.log(contact);
-        $("button[data-id*="+ contact.id +"]").closest("tr").remove();
+        $("tr[data-id*="+ contact.id +"]").remove();
       }
-
     })
   }
   
+  function editContact(button){
+    var id = button.data("id");
+    console.log(button.data("id"));
+    $.ajax({
+      url: '/api/contact/'+ id +'/edit',
+      method: 'GET',
+      success: function(contact){
+        replaceTdToInput(contact);
+      }
+    })
+  }
+
+
+  function replaceTdToInput(contact){
+    var row = $("tr[data-id="+ contact.id +"]");
+    var inputName = "<td><input type='text' name ='first_name' value=' "+ contact.first_name +" '/><input type='text' name ='last_name' value=' "+ contact.last_name +" '/></td>";
+    var inputEmail = "<td><input type='text' name ='email' value=' "+ contact.email +" '/></td>"
+    var inputPhone = "<td><input type='text' name ='phone' value=' "+ contact.phone +" '/></td>"
+    var inputBirthday = "<td><input type='date' name ='birthday' value=' "+ contact.birthday +" '/></td>"
+    var contentSave = "<td><button class='btn btn-default glyphicon glyphicon-ok save' data-id= " + contact.id + " ></button></td>";
+    var contentCancel = "<td><button class='btn btn-default glyphicon glyphicon-remove cancel' data-id= " + contact.id + " ></button></td>";
+
+    row.find(".full_name").replaceWith(inputName);
+    row.find(".email").replaceWith(inputEmail);
+    row.find(".phone").replaceWith(inputPhone);
+    row.find(".birthday").replaceWith(inputBirthday);
+    row.find(".edit").replaceWith(contentSave);
+    row.find(".delete").replaceWith(contentCancel);
+
+  }
 
 
   getContacts();
+  $("table").find()
 
   $("form").on('submit', function(event){
     event.preventDefault();
@@ -116,6 +141,12 @@ $(function() {
     event.preventDefault();
     deleteContact($(this));
     console.log("delete button clicked");
+  });
+
+  $("table").on('click', 'button.edit', function(event){
+    event.preventDefault();
+    editContact($(this));
+    console.log("edit button clicked");
   });
 
 
