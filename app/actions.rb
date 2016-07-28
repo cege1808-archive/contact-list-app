@@ -27,7 +27,7 @@ post '/api/contact/create' do
   if @contact.save
     @contact.to_json
   else
-    @contact.errors.full_messages.to_json
+    @contact.errors.to_json
   end
 end
 
@@ -45,7 +45,7 @@ post '/api/contact/:contact_id/save' do
   else
     @contact.errors.full_messages.to_json
   end
-  
+
 end
 
 delete '/api/contact/:contact_id/delete' do

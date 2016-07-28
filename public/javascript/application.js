@@ -1,4 +1,5 @@
 $(function() {
+
   $("button.cancel").hide();
   $(".add-contact form").hide();
   $(".add-contact").on('click', 'button', function(){
@@ -67,18 +68,23 @@ $(function() {
   function addContact(){
     var form = $("form");
     var addForm = form.serialize();
-    console.log(addform);
+    console.log(addForm);
     $.ajax({
       url: '/api/contact/create',
       method: 'POST',
       data: addForm,
       success: function(contact){
-        if (contact.first_name)  {
+        if (contact.birthday)  {
           insertContact(contact);
           console.log("done adding name");
           form.trigger("reset");
         }
         else {
+          $(".error_first_name").text(contact.first_name);
+          $(".error_last_name").text(contact.last_name);
+          $(".error_email").text(contact.email);
+          $(".error_phone").text(contact.phone);
+          $(".error_birthday").text(contact.birthday);
           console.log(contact);
         }
       }
@@ -139,7 +145,7 @@ $(function() {
           console.log("done saving name");
         }
         else {
-          console.log(contact);
+          $(".error").text(contact);
         }
       }
     })
@@ -147,10 +153,10 @@ $(function() {
 
   function replaceInfoToInput(contact){
     var row = $("tr[data-id="+ contact.id +"]");
-    var inputName = "<td><input class='first_name change' type='text' name ='first_name' value=' "+ contact.first_name +" '/><input class='last_name change' type='text' name ='last_name' value=' "+ contact.last_name +" '/></td>";
-    var inputEmail = "<td><input class='email change' type='text' name ='email' value=' "+ contact.email +" '/></td>"
-    var inputPhone = "<td><input class='phone change' type='text' name ='phone' value=' "+ contact.phone +" '/></td>"
-    var inputBirthday = "<td><input class='birthday change' type='date' name ='birthday' value=' "+ contact.birthday +" '/></td>"
+    var inputName = "<td><input class='first_name change' type='text' name ='first_name' value='"+ contact.first_name +"'/><input class='last_name change' type='text' name ='last_name' value='"+ contact.last_name +"'/></td>";
+    var inputEmail = "<td><input class='email change' type='text' name ='email' value='"+ contact.email +"'/></td>"
+    var inputPhone = "<td><input class='phone change' type='text' name ='phone' value='"+ contact.phone +"'/></td>"
+    var inputBirthday = "<td><input class='birthday change' type='date' name ='birthday' value='"+ contact.birthday +"'/></td>"
     var contentSave = "<td><button class='btn btn-default glyphicon glyphicon-ok save' data-id= " + contact.id + " ></button></td>";
     var contentCancel = "<td><button class='btn btn-default glyphicon glyphicon-remove cancel' data-id= " + contact.id + " ></button></td>";
 
@@ -183,8 +189,7 @@ $(function() {
 
   getContacts();
 
-
-  $("form").on('submit', function(event){
+  $(".add-contact").on('submit', function(event){
     event.preventDefault();
     addContact();
   });
