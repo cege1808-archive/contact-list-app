@@ -66,12 +66,12 @@ $(function() {
 
   function addContact(){
     var form = $("form");
-    var addform = form.serialize();
+    var addForm = form.serialize();
     console.log(addform);
     $.ajax({
       url: '/api/contact/create',
       method: 'POST',
-      data: addform,
+      data: addForm,
       success: function(contact){
         if (contact.first_name)  {
           insertContact(contact);
@@ -122,12 +122,35 @@ $(function() {
     })
   }
 
+  function saveContact(button){
+    var change = $(".change");
+    var saveChange = change.serialize();
+    console.log(saveChange);
+    var id = button.data("id");
+    console.log(button.data("id"));
+
+    $.ajax({
+      url: '/api/contact/'+ id +'/save',
+      method: 'POST',
+      data: saveChange,
+      success: function(contact){
+        if (contact.first_name)  {
+          replaceInputToInfo(contact);
+          console.log("done saving name");
+        }
+        else {
+          console.log(contact);
+        }
+      }
+    })
+  }
+
   function replaceInfoToInput(contact){
     var row = $("tr[data-id="+ contact.id +"]");
-    var inputName = "<td><input class='first_name' type='text' name ='first_name' value=' "+ contact.first_name +" '/><input class='last_name' type='text' name ='last_name' value=' "+ contact.last_name +" '/></td>";
-    var inputEmail = "<td><input class='email' type='text' name ='email' value=' "+ contact.email +" '/></td>"
-    var inputPhone = "<td><input class='phone' type='text' name ='phone' value=' "+ contact.phone +" '/></td>"
-    var inputBirthday = "<td><input class='birthday' type='date' name ='birthday' value=' "+ contact.birthday +" '/></td>"
+    var inputName = "<td><input class='first_name change' type='text' name ='first_name' value=' "+ contact.first_name +" '/><input class='last_name change' type='text' name ='last_name' value=' "+ contact.last_name +" '/></td>";
+    var inputEmail = "<td><input class='email change' type='text' name ='email' value=' "+ contact.email +" '/></td>"
+    var inputPhone = "<td><input class='phone change' type='text' name ='phone' value=' "+ contact.phone +" '/></td>"
+    var inputBirthday = "<td><input class='birthday change' type='date' name ='birthday' value=' "+ contact.birthday +" '/></td>"
     var contentSave = "<td><button class='btn btn-default glyphicon glyphicon-ok save' data-id= " + contact.id + " ></button></td>";
     var contentCancel = "<td><button class='btn btn-default glyphicon glyphicon-remove cancel' data-id= " + contact.id + " ></button></td>";
 
@@ -182,6 +205,12 @@ $(function() {
     event.preventDefault();
     cancelContact($(this));
     console.log("cancel button clicked");
+  });
+
+  $("table").on('click', 'button.save', function(event){
+    event.preventDefault();
+    saveContact($(this));
+    console.log("save button clicked");
   });
 
 

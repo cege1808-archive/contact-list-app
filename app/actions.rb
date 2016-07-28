@@ -31,8 +31,21 @@ post '/api/contact/create' do
   end
 end
 
-get '/contact/:contact_id' do
+post '/api/contact/:contact_id/save' do
+  content_type :json 
+  @contact = Contact.find(params[:contact_id])
+  @contact[:first_name] = params[:first_name]
+  @contact[:last_name] = params[:last_name]
+  @contact[:email] = params[:email]
+  @contact[:phone] = params[:phone]
+  @contact[:birthday] = params[:birthday]
 
+  if @contact.save
+    @contact.to_json
+  else
+    @contact.errors.full_messages.to_json
+  end
+  
 end
 
 delete '/api/contact/:contact_id/delete' do
