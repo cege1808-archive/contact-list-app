@@ -31,6 +31,12 @@ post '/api/contact/create' do
   end
 end
 
+post '/api/contacts/search' do
+  content_type :json 
+  @selected_contacts = Contact.where("first_name LIKE ? OR last_name LIKE ? OR email LIKE ? OR phone LIKE ?", "%#{params[:keyword]}%", "%#{params[:keyword]}%", "%#{params[:keyword]}%", "%#{params[:keyword]}%")
+  @selected_contacts.to_json
+end
+
 post '/api/contact/:contact_id/save' do
   content_type :json 
   @contact = Contact.find(params[:contact_id])

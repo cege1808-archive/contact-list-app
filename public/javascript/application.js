@@ -8,6 +8,15 @@ $(function() {
     $(this).parent().find("form").toggle();
   });
 
+  $(".search-contact form").hide();
+  $(".search-contact").on('click', 'button', function(){
+    $(this).parent().find(".search").toggle();
+    $(this).parent().find(".cancel").toggle();
+    $(this).parent().find("form").toggle();
+  });
+
+
+
 
   function setTable(){
     var head = $("table thead");
@@ -30,7 +39,7 @@ $(function() {
 
   function insertContact(contact){
     var body = $("table tbody");
-    body.append("<tr data-id= " + contact.id + " ></tr>");
+    body.append("<tr data-id= " + contact.id + " data-person='true' ></tr>");
     var row = body.find("tr").last(); 
     console.log(contact);
     var contentName = "<td class='full_name'>"+ contact.first_name + " " + contact.last_name +"</td>" ;
@@ -52,7 +61,7 @@ $(function() {
   }
 
   function getContacts(){
-    setTable();
+    $("tr[data-person='true']").remove();
     $.ajax({
       url: '/api/contacts',
       method: 'GET',
@@ -65,8 +74,27 @@ $(function() {
     });
   }
 
+  function searchContacts(){
+    var form = $(".search-contact form");
+    var searchForm = form.serialize();
+    console.log(searchForm);
+    $.ajax({
+      url: '/api/contacts/search',
+      method: 'POST',
+      data: searchForm,
+      success: function(data){
+        console.log(data);
+        $("tr[data-person='true']").remove();
+        $.each(data, function(index, contact){
+          insertContact(contact);
+          form.trigger("reset");
+        });
+      }
+    });
+  }
+
   function addContact(){
-    var form = $("form");
+    var form = $(".add-contact form");
     var addForm = form.serialize();
     console.log(addForm);
     $.ajax({
@@ -186,12 +214,22 @@ $(function() {
     row.find(".cancel").replaceWith(contentDelete);
   }
 
-
+  setTable();
   getContacts();
 
   $(".add-contact").on('submit', function(event){
     event.preventDefault();
     addContact();
+  });
+
+  $(".search-contact").on('submit', function(event){
+    event.preventDefault();
+    searchContacts();
+  });
+
+  $(".all-contact").on('click', function(event){
+    event.preventDefault();
+    getContacts();
   });
 
   $("table").on('click', 'button.delete', function(event){
