@@ -1,16 +1,33 @@
-.add-contact {
-  margin-top: 45px;
-  margin-bottom: 40px;
-  display: inline-block;
-}
 
-.user-image {
-  height:40px;
-  padding: 5px;
+.clear{
+  clear: both;
 }
 
 .contact-list tbody tr td {
   line-height: 40px;
+}
+
+.dropdown-menu {
+  width:250px;
+}
+
+.form-group {
+  margin: 0px;
+  padding: 0 20px;
+}
+
+.form-control {
+  padding: 0px;
+}
+
+.form-group + .btn.btn-default {
+  float:right;
+  margin: 20px;
+}
+
+.form-group > label {
+  height: 14px;
+  line-height: 14px;
 }
 
 form span {
@@ -18,19 +35,35 @@ form span {
   color:grey;
 }
 
-.search-contact {
-  display: inline-block;
-  margin-top: 30px;
-  margin-bottom: 40px;
+.github > span.fa.fa-github {
+  font-size: 20px;
 }
 
-.all-contact {
-  display: inline-block;
-  margin-top: 30px;
-  margin-bottom: 40px;
+.github {
+  padding: 5px 10px;
 }
 
-.brand {
-  margin-top: 40px;
-  margin-bottom: 40px;
+.navbar-default{
+  background-color: transparent;
+  height: 90px;
+  line-height:  90px;
+  border: none;
+  margin: 10px;
 }
+
+ul.navbar{
+  list-style: none;
+}
+
+ul.navbar > li {
+  margin: 0 5px;
+}
+
+.user-image {
+  height:40px;
+  padding: 5px;
+}
+
+
+
+
