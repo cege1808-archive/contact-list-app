@@ -11,9 +11,10 @@ configure :development, :test do
         'database' => APP_ROOT.join('db', 'development.sqlite3')
       }
     }
-    else
-      set :database, ENV['DATABASE_URL']
-    end
+  else
+    set :database, ENV['DATABASE_URL']
+  end
+end
 
 configure :production do
   # Database connection is configured automatically based on the DATABASE_URL
