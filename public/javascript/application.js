@@ -1,21 +1,18 @@
 $(function() {
 
   $("button.cancel").hide();
-  $(".add-contact form").hide();
-  $(".add-contact").on('click', 'button', function(){
-    $(this).parent().find(".add").toggle();
-    $(this).parent().find(".cancel").toggle();
-    $(this).parent().find("form").toggle();
-  });
 
-  $(".search-contact form").hide();
-  $(".search-contact").on('click', 'button', function(){
-    $(this).parent().find(".search").toggle();
-    $(this).parent().find(".cancel").toggle();
-    $(this).parent().find("form").toggle();
-  });
+  // $(".add-contact").on('click', 'button', function(){
+  //   $(this).parent().find(".add").toggle();
+  //   $(this).parent().find(".cancel").toggle();
+  //   // $(this).parent().find("form").dropdown();
+  // });
 
-
+  // $(".search-contact").on('click', 'button', function(){
+  //   $(this).parent().find(".search").toggle();
+  //   $(this).parent().find(".cancel").toggle();
+  //   $(this).parent().find("form").dropdown();
+  // });
 
 
   function setTable(){
