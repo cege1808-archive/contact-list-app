@@ -1,7 +1,7 @@
-Sinatra
+Contact List
 =============
 
-Brought to you by Lighthouse Labs
+A simple contact list interface, where you can add, edit, delete, and search.
 
 ## Getting Started
 
